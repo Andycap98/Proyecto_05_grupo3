@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background-color: #1b2440;
+  background-color: hsl(225, 35%, 20%);
   color: white;
   font-family: "Comic Sans MS", sans-serif;
   display: flex;

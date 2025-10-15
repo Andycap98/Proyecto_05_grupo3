@@ -5,9 +5,9 @@ export default function App() {
   const [puntaje, setPuntaje] = useState(0);
   const [posicionEstrella, setPosicionEstrella] = useState({ y: 0, x: 0 });
   const [visible, setVisible] = useState(false);
-
+  const [juegoActivo,setJuegoActivo]=useState (true);
   // Agregar mÃ¡s estados (por ejemplo: mensaje de victoria o estado del juego)
-
+  const [mensaje,setMensaje]=useState ("");
   // FunciÃ³n que genera una posiciÃ³n aleatoria para la estrella
   const posicionAlAzar = () => {
     // Ayuda: usar Math.random() * 80 + 10 para y y x
