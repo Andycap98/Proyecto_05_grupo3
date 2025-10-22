@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
-
 import EstudiantesForm from './assets/components/Formulario/EstudiantesForm'
+import AtraparEstrellas from './assets/components/AtraparEstrellas/AtraparEstrellas'
 
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
     <Container>
       <h1>Formulario de Estudiantes</h1>
       <EstudiantesForm/>
+      <AtraparEstrellas/>
     </Container>
   )
 }
