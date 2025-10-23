@@ -1,110 +1,126 @@
-import { useState, useEffect, useCallback } from "react";
-//import { ModificarJuego } from "./ModificarJuegos";
-//import { BuscarJuego } from "./BuscarJuego";
 
-function FormJuegos() {
-    const [juegos, setJuegos] = useState([]);
+import { useEffect, useCallback, useState } from "react";
+import ModificarJuego from "./ModificarJuego";
+import BuscarJuego from "./BuscarJuego";
+import "../../css/FormJuego.css"; // tu CSS pastel
 
-    const [formulario, setFormulario] = useState({
-        id: '',
-        nombre: '',
-        precio: '',
-        tipo: '',
-        estado: true,
-        modificado: true,
+function FormJuego() {
+  const [juegos, setJuegos] = useState([]);
+  const [formulario, setFormulario] = useState({
+    id: "",
+    nombre: "",
+    precio: "",
+    tipo: "",
+    estado: true,
+    modificado: true,
+  });
+
+  useEffect(() => {
+    console.log(juegos);
+  }, [juegos]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormulario({ ...formulario, [name]: value });
+  };
+
+  const agregarJuego = (e) => {
+    e.preventDefault();
+    const nuevoJuego = {
+      ...formulario,
+      id: Date.now(),
+      nombre: formulario.nombre,
+      precio: parseFloat(formulario.precio),
+      tipo: formulario.tipo,
+    };
+
+    setJuegos([...juegos, nuevoJuego]);
+    setFormulario({
+      id: "",
+      nombre: "",
+      precio: "",
+      tipo: "",
+      estado: true,
+      modificado: true,
     });
+  };
 
-    // tal vez llamar a la BD para cargar los juegos ya almacenados 
-    useEffect(() => {
-        console.log(juegos)
-    }, [juegos]);
+  const agregar_modificado = (juego_modificado) => {
+    const nuevo_arreglo = juegos.map((j) =>
+      j.id === juego_modificado.id ? juego_modificado : j
+    );
+    setJuegos(nuevo_arreglo);
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormulario({
-            ...formulario,
-            [name]: value,
-        })
-    };
+  const modificar = useCallback((j) => {
+    setJuegos((prevJuegos) =>
+      prevJuegos.map((a) =>
+        a.id === j.id ? { ...a, modificado: !a.modificado } : a
+      )
+    );
+  }, []);
 
-    const agregarJuego = (e) => {
-        e.preventDefault()
-        const nuevoJuego = {
-            ...formulario,
-            id: Date.now(),
-            nombre: formulario.nombre,
-            precio: parseFloat(formulario.precio),
-            tipo: formulario.tipo,
-        }
-        setJuegos([...juegos, nuevoJuego]);
-        setFormulario({
-            id: '',
-            nombre: '',
-            precio: '',
-            tipo: '',
-            estado: true,
-            modificado: true,
-        })
-    };
+  return (
+    <div className="form-juego-container">
+      <div className="form-juego-box">
+        <h2>📋 Administrar Juegos</h2>
 
-    const agregar_modificado = (juego_modificado) => {
-        const nuevo_arreglo = juegos.map((juego) => {
-            if (juego.id === juego_modificado.id) {
-                return juego_modificado;
-            }
-            return juego;
-        }
-        )
-        setJuegos(nuevo_arreglo);
-    };
+        {/* Formulario */}
+        <form onSubmit={agregarJuego} className="form-juego-form">
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre del juego"
+            value={formulario.nombre}
+            onChange={handleChange}
+            required
+          />
+          <input
+            min="0"
+            type="number"
+            name="precio"
+            placeholder="Precio unitario"
+            value={formulario.precio}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="tipo"
+            placeholder="Tipo o categoría"
+            value={formulario.tipo}
+            onChange={handleChange}
+            required
+          />
 
-    const modificar = useCallback((juego) => {
-        setJuegos(prevJuegos => prevJuegos.map(a =>
-            a.id === juego.id ? { ...a, modificado: !a.modificado } : a
-        ));
-    }, []);
+          <button type="submit">Agregar Juego</button>
+        </form>
 
-    /*** const modificar = useCallback ((prod) => {
-    setProductos(productos.map(a =>
-    a.id === prod.id ? { ...a, modificado: !a.modificado } : a
-    ));
-    },[productos]);*/
+        {/* Lista de juegos */}
+        {juegos.length > 0 && <h3 className="lista-titulo">🎮 Lista de juegos</h3>}
 
-    return (
-        <>
-            <form onSubmit={agregarJuego}>
-                <input type="text" name="nombre"
-                    placeholder="Nombre" value={formulario.nombre} onChange={handleChange} requiered />
-                <input type="text" name="precio"
-                    placeholder="Precio Unitario" value={formulario.precio} onChange={handleChange} requiered />
-                <input type="text" name="tipo"
-                    placeholder="Tipo" value={formulario.tipo} onChange={handleChange} requiered />
+        <ul className="lista-juegos">
+          {juegos.map((j) => (
+            <li key={j.id} className="juego-item">
+              {j.modificado === false ? (
+                <ModificarJuego juego={j} funcion_modificar={agregar_modificado} />
+              ) : (
+                <div>
+                  ID: {j.id} — <strong>{j.nombre}</strong> — 💲{j.precio} — {j.tipo}
+                </div>
+              )}
+              <button onClick={() => modificar(j)} className="btn-modificar">
+                ✏️ Modificar
+              </button>
+            </li>
+          ))}
+        </ul>
 
-                <button type="submit">Agregar Juego</button>
-            </form>
-
-            {juegos.length > 0 && <h2> Lista de Juegos</h2>}
-            <ul>
-                {juegos.map(juego => (
-                    <li key={juego.id}>
-                        {juego.modificado === false ? (
-                            <ModificarJuego juego={juego} funcion_modificar={agregar_modificado}></ModificarJuego>
-                        ) : (
-                            <div>
-                                ID: {juego.id}
-                                Nombre: {juego.nombre}
-                                Precio: ${juego.precio}
-                                Tipo: {juego.tipo}
-                            </div>
-                        )}
-
-                        <button onClick={() => modificar(juego)}> Modificar </button>
-                    </li>
-                ))}
-            </ul>
-            {/*<BuscarJuego juego={juegos} > Texto </BuscarJuego>*/}       </>
-    )
+        {/* Buscador */}
+        <BuscarJuego juegos={juegos}>Texto</BuscarJuego>
+      </div>
+    </div>
+  );
 }
 
-
-export default FormJuegos;
+export default FormJuego;
