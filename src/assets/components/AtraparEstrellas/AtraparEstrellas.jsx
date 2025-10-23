@@ -1,4 +1,44 @@
-import { useState, useEffect } from "react";
+import "../../css/App.css";
+import Estrella from "./Estrella";
+import { useJuegoEstrellas } from "./useJuegoEstrellas";
+
+export default function AtraparEstrellas() {
+  const {
+    puntaje,
+    posicionEstrella,
+    visible,
+    mensaje,
+    juegoActivo,
+    agarrarEstrella,
+    reiniciarJuego,
+  } = useJuegoEstrellas();
+
+  return (
+    <div className="contenedor-juego">
+      <h1>Atrapa las Estrellas</h1>
+      <p>Puntaje: {puntaje}</p>
+      {mensaje && <h2>{mensaje}</h2>}
+
+      <div className="juego-area">
+        {visible && juegoActivo && (
+          <Estrella
+            top={posicionEstrella.y}
+            left={posicionEstrella.x}
+            onClick={agarrarEstrella}
+          />
+        )}
+      </div>
+
+      <button className="boton-reiniciar" onClick={reiniciarJuego}>
+        Reiniciar juego
+      </button>
+    </div>
+  );
+}
+
+/*esto es el codigo anterioir que estaba en este archivo antes de dividirlo en componentes*/
+
+/*import { useState, useEffect } from "react";
 import "../../css/App.css";
 
 export default function AtraparEstrellas() {
@@ -80,4 +120,4 @@ export default function AtraparEstrellas() {
       <button className="boton-reiniciar" onClick={reiniciarJuego}>Reiniciar juego</button>
     </div>
   );
-}
+}*/
