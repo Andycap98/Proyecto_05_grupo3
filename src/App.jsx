@@ -1,24 +1,16 @@
-import { useState } from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
-import FormJuego from './assets/components/Formulario/FormJuego';
+import { Container } from "react-bootstrap";
+import FormJuego from "./assets/components/Formulario/FormJuego";
+import AtraparEstrellas from "./assets/components/AtraparEstrellas/AtraparEstrellas";
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [estudiantes, setEstudiantes] = useState([]);
-
-  const agregarEstudiante = (estudiante) => {
-    setEstudiantes([...estudiantes, estudiante])
-  };
-
   return (
-    <Container>
-
+    <Container fluid>
       <FormJuego />
 
-      <h1> Lista de juegos </h1>
+      <AtraparEstrellas />
 
     </Container>
-  )
+  );
 }
 
-export default App
+export default App;
